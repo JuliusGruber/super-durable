@@ -94,6 +94,10 @@ checked.
 
 - **Stopping rule:** what result would count as "it worked", and what would
   end the experiment. Deferred by the owner.
-- **Which access protocols and credentials** the TU Wien mail server allows.
-- **Which models Aqueduct offers** and how it is called.
 - **Which actions need confirmation** before the agent carries them out.
+- **Whether TU.it permits automated access** to a staff mailbox, and whether
+  a login other than the main password is available.
+
+The questions on mail protocols, Aqueduct's models and pi-durable's model
+layer were answered later the same day; see
+[tu-wien-services.md](tu-wien-services.md).
