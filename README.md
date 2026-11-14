@@ -12,3 +12,4 @@ collected in [research/links.md](research/links.md).
 
 - [earendil-works/pi — packages/durable](https://github.com/earendil-works/pi/tree/main/packages/durable) — the pi-durable source in the pi repository.
 - [Pi Durable](https://earendil.com/posts/pi-durable/) — the Earendil post introducing pi-durable.
+- [Pi Durable on Cloudflare](https://earendil.com/posts/pi-durable-on-cloudflare/) — the Earendil post on running pi-durable on Cloudflare.
