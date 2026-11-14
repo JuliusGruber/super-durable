@@ -18,6 +18,7 @@ was built or run. Paths below are relative to the pi repository.
 | What does pi's remote execution environment provide? | Resolved | `@earendil-works/pi-env`: a Rust daemon deployed and started over SSH. No offline queueing. |
 | Does the background-subagent example exist? | Resolved | Yes, as `22-subagent-background.ts`, and a product adaptation exists in `apps/p2`. |
 | What restarts a Worker that exhausted `restartLimit`? | Resolved | Nothing automatic. The run ends with a recorded failure, and a `continue` submission restarts it. |
+| Does pi-durable compact context? | Resolved | Yes, automatically and by default, with a manual `compact()` as well. Raw history stays in storage. |
 | Does `PiHarness` work inside an Agents SDK facet? | Still open | Not in this repository. |
 | Comparable builds on Temporal, Restate, Inngest, DBOS | Still open | Not looked at. |
 
@@ -111,6 +112,56 @@ Differences from the article's endpoint daemon:
 - So the Watchdog's job is concrete: read `runFailure` through the read-only
   Harness, judge, and ask the owning process to submit a `continue` or a
   corrective input.
+
+## Context compaction
+
+Checked later the same day at the same commit, after
+[blind-spots.md](blind-spots.md) and
+[workflow-engine-comparison.md](workflow-engine-comparison.md) listed it as
+unchecked. Read: the README "Compaction" section, the changelog,
+`src/harness/agent.ts`, `src/harness/types.ts` and
+`test/examples/24-compaction.ts`. Nothing was run.
+
+- **Compaction is built in and on by default.** `DEFAULT_COMPACTION_POLICY`
+  has `enabled: true` (`packages/durable/src/harness/agent.ts:30-35`).
+- **How it works:** older entries are summarised by a model call, and a
+  `pi.compaction` entry holding the summary is appended. Older entries stay in
+  storage, so the raw history is never changed.
+- **Three triggers:**
+  - *Threshold:* above `contextWindow - reserveTokens` (default 16,384) the
+    next request waits for a compaction.
+  - *Background:* a compaction starts `backgroundTokens` (default 32,768)
+    below that threshold while the conversation keeps working.
+  - *Overflow:* when a provider rejects a request as too long, generation
+    compacts and retries once.
+- **Recent context is kept verbatim,** roughly `keepRecentTokens` (default
+  20,000).
+- **Manual compaction:** `conversation.compact(instructions)` works even when
+  automatic compaction is off.
+- **Settings per model and per conversation.** `modelOverrides` is keyed by
+  exact `"provider/modelId"`, and `configure({ compaction })` sets one
+  conversation's values. So a Router on a light model and Workers on a strong
+  one can differ, unlike the Harness-wide batching mode.
+- **A busy conversation is not blocked.** The summary is placed at once when
+  the conversation is idle, otherwise at the next turn boundary.
+- **A custom summary is possible.** A `beforeCompact` hook can decline a
+  compaction or supply its own summary. This is where the article's Inline &
+  Spill references could be written into the Router's summary.
+- **Failure is visible.** A failed blocking compaction fails the generation
+  with `model_error`, and the newest failure stays in
+  `docs["pi.live"].compactionFailure`. Summarisation spend counts in
+  `pi.usage`.
+- **Released, not only on `main`.** The changelog has compaction fixes under
+  1.2.0, `modelOverrides` under 1.4.0 and per-conversation settings under
+  1.5.1.
+- **Not checked:**
+  - the summarisation prompt, and so what a months-long Router loses in each
+    summary;
+  - how inbox items queued during a compaction are placed;
+  - the effect on the provider's prompt cache.
+
+Compaction bounds the model context, not the database. Old entries are kept
+and conversations still cannot be deleted, so storage keeps growing.
 
 ## Corrections to the feasibility report
 

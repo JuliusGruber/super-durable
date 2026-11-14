@@ -119,6 +119,9 @@ another machine.
   lists long-term memory as an open problem.
 - **Context compaction on pi-durable was never checked.** Neither was what
   happens to queued inbox items or the prompt cache across a compaction.
+  *Update:* compaction has since been checked and is built in and on by
+  default; see [source-reading.md](source-reading.md#context-compaction). The
+  inbox and prompt-cache questions remain open.
 - **Inline & Spill and Chain of Recall are filed as "host code".** They are in
   fact the Router's memory design, and probably the hardest application part.
 - **Idle periods defeat prompt caching.** A Router woken after a quiet hour
