@@ -111,6 +111,10 @@ reachable only through the parent, and the tree is capped at four levels.
 
 ## Open questions
 
+A later reading of the source resolved the Watchdog, remote-execution,
+`restartLimit` and example questions below, and corrected three points of this
+report. See [source-reading.md](source-reading.md).
+
 - **Worker shell and filesystem on Cloudflare:** nothing verified on Sandbox
   SDK, Containers or git worktrees, nor on what pi's remote execution
   environment provides (transport, authentication, reconnect, queued
