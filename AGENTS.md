@@ -4,9 +4,13 @@ Guidance for AI coding agents working in this repository.
 
 ## Project
 
-`super-durable` is a new, currently empty repository: no language, framework,
-build, or test setup has been chosen yet. Update this section with what the
-project is and how to build and test it as soon as the first code lands.
+`super-durable` explores whether the Super-agent architecture can be built on
+pi-durable. It holds research notes in `research/` and throwaway spikes in
+`spikes/`. There is no product code, build or test setup yet.
+
+Spikes are TypeScript on Node 22.19 or later, run directly with `node` (no
+build step). Each spike folder has its own `package.json` and README with how
+to run it.
 
 ## Spikes
 
