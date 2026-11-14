@@ -47,13 +47,53 @@ finding. These are inferences from the existing documents, not new research.
 | Storage | One SQLite file | SQLite on a persistent volume with a single replica, or the managed PostgreSQL. Whether pi-durable has PostgreSQL storage is unchecked. |
 | Substrate comparison | pi-durable for the Router's behaviour | Unchanged in direction. Managed PostgreSQL does make DBOS (Node plus Postgres) cheaper to run here than the comparison assumed. |
 
+## Decisions
+
+Given by the project owner on 14 November 2026.
+
+| Question | Decision |
+|---|---|
+| Mail, calendar and to-do system | The owner's TU Wien Outlook mailbox, reached in the browser at `mail.intern.tuwien.ac.at/owa`. |
+| Authority | The agent may act (send, accept, delete), not only draft. |
+| Model provider | TU Wien Aqueduct. |
+| Channel to the owner | Chat and a web page. |
+| Stopping rule | Deferred; too hard to answer now. |
+
+## What the decisions imply
+
+Inferences only. The mailbox was not opened and none of these services was
+checked.
+
+- **The mailbox looks like an on-premises Exchange server.** An `/owa` address
+  on the university's own domain suggests that. If so, Microsoft's cloud API
+  (Graph) does not apply, and access goes through Exchange Web Services, IMAP
+  and SMTP, or ActiveSync. Which of these TU Wien enables is unchecked.
+- **Credentials are the first hard problem.** The agent would hold a login to
+  the owner's university account, in a container on a shared platform. Whether
+  an app password or token exists, or only the main password, is unchecked,
+  and so is whether TU Wien permits automated access.
+- **Events will probably be polled.** Exchange push notifications need an
+  endpoint the mail server can reach, which is unconfirmed. Polling needs
+  nothing inbound.
+- **The model stays inside TU Wien,** which answers the privacy question for
+  mail content. Which models Aqueduct offers, whether they call tools
+  reliably, and whether pi-durable's model layer can talk to it are unchecked.
+  Model strength matters: the article's weaker setups failed to delegate at
+  all.
+- **"May act" makes the threat model the next document to write.** Anyone can
+  e-mail the owner, and the agent can now answer in the owner's name. Acting
+  is decided; what remains is which actions run freely and which wait for a
+  confirmation in the chat.
+- **The web page needs a login.** It would be served from the OpenShift
+  project and would control the mailbox.
+- **"Chat and a web page" is read here as a chat interface on a web page.** A
+  separate chat service (for example a messenger) would be an extra
+  integration.
+
 ## Still open
 
 - **Stopping rule:** what result would count as "it worked", and what would
-  end the experiment.
-- **Systems:** which mail, calendar and to-do services the agent connects to.
-  This decides the integrations and whether events are pushed or polled.
-- **Authority:** whether the agent may act (send, accept, delete) or only
-  prepare drafts and suggestions.
-- **Model:** which model provider may see the mail.
-- **Channel:** how the owner talks to the agent (e-mail, chat, a web page).
+  end the experiment. Deferred by the owner.
+- **Which access protocols and credentials** the TU Wien mail server allows.
+- **Which models Aqueduct offers** and how it is called.
+- **Which actions need confirmation** before the agent carries them out.
