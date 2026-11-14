@@ -8,6 +8,12 @@ Guidance for AI coding agents working in this repository.
 build, or test setup has been chosen yet. Update this section with what the
 project is and how to build and test it as soon as the first code lands.
 
+## Spikes
+
+All spikes go into the `spikes/` folder, one subfolder per spike. A spike is
+throwaway code written to learn something: it gets minimal or no tests, and
+keeping what it produced is a separate decision.
+
 ## Git Workflow
 
 This repository follows a continuous commit-and-push workflow:
